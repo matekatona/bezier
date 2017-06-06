@@ -14,6 +14,3 @@ __pycache__
 
 # Mac
 .DS_Store
-
-# Generated files
-src/bezier/_speedup.so

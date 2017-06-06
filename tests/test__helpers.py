@@ -118,16 +118,6 @@ class Test__bbox(unittest.TestCase):
         self.assertEqual(top, 4.0)
 
 
-@unittest.skipIf(utils.WITHOUT_SPEEDUPS, 'No speedups available')
-class Test_speedup_bbox(Test__bbox):
-
-    @staticmethod
-    def _call_function_under_test(nodes):
-        from bezier import _speedup
-
-        return _speedup.speedup.bbox(nodes)
-
-
 class Test_contains(unittest.TestCase):
 
     UNIT_SQUARE = np.asfortranarray([
@@ -441,20 +431,3 @@ class Test__wiggle_interval_py(unittest.TestCase):
             self._call_function_under_test(value), value)
         self.assertEqual(
             self._call_function_under_test(value, wiggle=0.25), 1.0)
-
-
-@unittest.skipIf(utils.WITHOUT_SPEEDUPS, 'No speedups available')
-class Test_speedup_wiggle_interval(Test__wiggle_interval_py):
-
-    def _call_function_under_test(self, value, **kwargs):
-        from bezier import _speedup
-
-        self.assertEqual(kwargs, {})
-        return _speedup.speedup.wiggle_interval(value, **kwargs)
-
-    def test_custom_wiggle(self):
-        # Fortran implementation doesn't support optional wiggle. This
-        # isn't because Fortran **can't** (just use "optional"), it's just
-        # to allow the compiler to pre-compute 1 + wiggle / 1 - wiggle
-        # rather than having to deal with it at run-time.
-        pass
